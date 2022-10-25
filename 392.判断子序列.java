@@ -7,21 +7,16 @@
 // @lc code=start
 class Solution {
     public boolean isSubsequence(String s, String t) {
-        if(s.equals("")) return true;
-        String[] sArr = s.split("");
-        String[] tArr = t.split("");
-        int tPoint = 0;
-        try{
-            for (String sItem : sArr) {
-                while(!sItem.equals(tArr[tPoint])){
-                    ++tPoint;
-                }
+        int n = s.length();
+        int m = t.length();
+        int i=0, j=0;
+        while(i<n && j<m){
+            if(s.charAt(i) == t.charAt(j)){ //it's crucial
+                ++i;
             }
-        }catch(ArrayIndexOutOfBoundsException e){
-            return false;
+            ++j;
         }
-
-        return true;
+        return i == n;
     }
 }
 // @lc code=end
