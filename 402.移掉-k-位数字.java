@@ -8,33 +8,18 @@ import java.util.Stack;
 
 // @lc code=start
 class Solution {
-    public String removeKdigits(String num, int k) {//this kind of question is still hard for me
-        int n = num.length();
-        int hasHandledNum = 0;
-        
-        Stack<Character> stack = new Stack<>();
-        for(int i=0; i<n; ++i){
-            Character ch = num.charAt(i);
-            while(!stack.isEmpty() && ch.compareTo(stack.peek()) < 0 && hasHandledNum<k){
-                stack.pop();
-                ++hasHandledNum;
+    public String removeKdigits(String num, int k) {
+        Deque<Character> stk = new ArrayDeque<>();
+        for (char c : num.toCharArray()) {
+            while (!stk.isEmpty() && c < stk.getLast() && k > 0) {
+                stk.pollLast();
+                k--;
             }
-            stack.push(ch);
+            stk.addLast(c);
         }
-        StringBuffer str = new StringBuffer();
-        for(Character ch : stack){
-            str.append(ch);
-        }
-        if(hasHandledNum < k){
-            str.delete(str.length()-(k-hasHandledNum), str.length()); //i'm confused by it
-        }
-
-        System.out.println(str);
-        while(!str.toString().equals("") && str.charAt(0) == '0') str.deleteCharAt(0);
-        String result = str.toString();
-        if(result.equals("")) return "0";
-        return result;
-
+        String res = stk.stream().map(Object::toString).collect(Collectors.joining());
+        res = res.substring(0, res.length() - k).replaceAll("^0+", "");
+        return res.isEmpty() ? "0" : res;
     }
 }
 // @lc code=end
