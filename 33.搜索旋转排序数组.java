@@ -6,41 +6,32 @@
 
 // @lc code=start
 class Solution {
-    int ml, mr, len, target;
+    /*
+     * 将数组一分为二，其中一定有一个是有序的，另一个可能是有序，也能是部分有序。
+     * 此时有序部分用二分法查找。无序部分再一分为二，其中一个一定有序，另一个可能有序，可能无序。就这样循环.
+     */
 
     public int search(int[] nums, int target) {
-        len = nums.length;
-        ml = nums[0]; // most left
-        mr = nums[len - 1];
-        this.target = target;
-        if (len == 1)
-            return target == ml ? 0 : -1;
-        int k = biSearchK(nums, 0, len - 1);
-        if (nums[k] < mr) {
-            --k;
-        }
-        if (target > ml && target < nums[k]) {
-            // search 0-k
-            return binarySearch(nums, target, 0, k);
-        } else if (target > nums[k + 1] && target < mr) {
-            // search k+1 - len-1
-            return binarySearch(nums, target, k + 1, len - 1);
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            int midVal = nums[mid];
+            int leftVal = nums[left], rightVal = nums[right];
+            if (midVal == target) {
+                return mid;
+            } else if (midVal >= leftVal) {
+                if (target < midVal && target >= leftVal)
+                    right = mid - 1;
+                else
+                    left = mid + 1;
+            } else {
+                if (target > midVal && target <= rightVal)
+                    left = mid + 1;
+                else
+                    right = mid - 1;
+            }
         }
         return -1;
-    }
-
-    private int biSearchK(int[] nums, int l, int r) {
-        int mid = l + (r - l) / 2;
-        int midVal = nums[mid];
-        if (l == r)
-            return l;
-        else if (midVal > ml) {
-            return biSearchK(nums, mid + 1, r);
-        } else if (midVal < mr) {
-            return biSearchK(nums, l, mid - 1);
-        } else {
-            return -1;
-        }
     }
 
     // public static int binarySearch(int[] nums, int target) {
@@ -58,19 +49,20 @@ class Solution {
     // return -1;
     // }
 
-    private static int binarySearch(int[] nums, int target, int left, int right) {
-        if (left > right) {
-            return -1;
-        }
-        int mid = left + (right - left) / 2;
-        if (nums[mid] == target) {
-            return mid;
-        } else if (nums[mid] < target) {
-            return binarySearch(nums, target, mid + 1, right);
-        } else {
-            return binarySearch(nums, target, left, mid - 1);
-        }
-    }
+    // private static int binarySearch(int[] nums, int target, int left, int right)
+    // {
+    // if (left > right) {
+    // return -1;
+    // }
+    // int mid = left + (right - left) / 2;
+    // if (nums[mid] == target) {
+    // return mid;
+    // } else if (nums[mid] < target) {
+    // return binarySearch(nums, target, mid + 1, right);
+    // } else {
+    // return binarySearch(nums, target, left, mid - 1);
+    // }
+    // }
 
 }
 // @lc code=end
