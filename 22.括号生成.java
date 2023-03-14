@@ -14,31 +14,34 @@ import java.util.Set;
 class Solution {
 
     /*
-     "(" + 【i=p时所有括号的排列组合】 + ")" + 【i=q时所有括号的排列组合】
-     但是太慢了，时间复杂度太高
-     */ 
-    private List<String>[] res;
+     * "(" + 【i=p时所有括号的排列组合】 + ")" + 【i=q时所有括号的排列组合】
+     * 但是太慢了，时间复杂度太高
+     * 
+     * dfs思路https://leetcode.cn/problems/generate-parentheses/solution/hui-su-suan-
+     * fa-by-liweiwei1419/
+     */
+    private List<String> res;
 
     public List<String> generateParenthesis(int n) {
-        res = new List[n+1];
-        res[0] = new ArrayList<String>(100);
-        res[0].add("");
-        for (int i = 1; i <= n; i++) {
-            res[i] = new ArrayList<String>();
-            for (int j = 0; j < i; j++) {
-                handle(i, j);
-            }
-        }
-        return res[n];
+        res = new ArrayList<>();
+        dfs("", 0, 0, n);
+        return res;
     }
 
-    public void handle(int n, int p) {
-        int q = n - p - 1;
-        res[p].forEach(ip ->{
-            res[q].forEach(iq -> {
-                res[n].add("(" + ip + ")" + iq);
-            });
-        });
+    //记录了左边的和右边的括号用了几个，最后要用n个
+    private void dfs(String cur, int left, int right, int n) {
+        if (left == n && right == n) {
+            res.add(cur);
+            return;
+        }
+        if (left < right) //右边多了，不符合
+            return;
+        if (left < n) {
+            dfs(cur + "(", left + 1, right, n);
+        }
+        if (right < n) {
+            dfs(cur + ")", left, right + 1, n);
+        }
     }
 
 }
