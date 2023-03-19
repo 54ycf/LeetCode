@@ -7,22 +7,20 @@
 // @lc code=start
 class Solution {
     public int search(int[] nums, int target) {
-        return rec(0, nums.length - 1, nums, target);
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            int midV = nums[mid];
+            if (midV < target) {
+                left = mid + 1;
+            } else if (midV > target) {
+                right = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return -1;
     }
 
-    private int rec(int l, int r, int[] nums, int target) {
-        if (l > r) {
-            return -1;
-        }
-        int mid = (l + r) / 2;
-        int midV = nums[mid];
-        if (midV < target) {
-            return rec(mid + 1, r, nums, target);
-        } else if (midV > target) {
-            return rec(l, mid - 1, nums, target);
-        } else {
-            return mid;
-        }
-    }
 }
 // @lc code=end
