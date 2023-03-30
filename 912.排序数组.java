@@ -12,9 +12,11 @@ class Solution {
 
     // 法1，快排
     // 法2，归并
+    // 法3，堆排序
     public int[] sortArray(int[] nums) {
         // quickSort(nums, 0, nums.length - 1);
-        mergeSort(nums, 0, nums.length - 1);
+        // mergeSort(nums, 0, nums.length - 1);
+        heapSort(nums);
         return nums;
     }
 
@@ -67,6 +69,42 @@ class Solution {
         ind = 0;
         for (int k = l; k <= r; k++) {
             nums[k] = tmp[ind++];
+        }
+    }
+
+    private void heapSort(int[] nums) {
+        buildHeap(nums);
+        for (int i = nums.length - 1; i > 0; --i) {
+            swap(nums, i, 0);
+            heapify(nums, 0, i);
+        }
+    }
+
+    private void buildHeap(int[] nums) {
+        int len = nums.length;
+        for (int i = len / 2 - 1; i >= 0; --i) {
+            heapify(nums, i, len);
+        }
+    }
+
+    /**
+     * @param nums
+     * @param i    当前维护的下标
+     * @param len  数组长度
+     */
+    private void heapify(int[] nums, int i, int len) {
+        int leftSonInd = i * 2 + 1;
+        int rightSonInd = i * 2 + 2;
+        int largestInd = i;
+        if (leftSonInd < len && nums[leftSonInd] > nums[largestInd]) {
+            largestInd = leftSonInd;
+        }
+        if (rightSonInd < len && nums[rightSonInd] > nums[largestInd]) {
+            largestInd = rightSonInd;
+        }
+        if (i != largestInd) {
+            swap(nums, i, largestInd);
+            heapify(nums, largestInd, len);
         }
     }
 }
